@@ -77,11 +77,23 @@ export type Prediction = {
 };
 
 // ---------------------------------------------------------------- fetch helpers
+const API_DOWN =
+  "The Flask API is not running - nothing answered on port 5000. Start it in a separate terminal (see below), then refresh this page.";
+
+
+async function handle<T>(res: Response): Promise<T> {
+  const body = await res.json().catch(() => null);
+  if (!res.ok) {
+    // Flask always answers with JSON {error}; a non-JSON 500 means the Next.js proxy could not connect.
+    if (body && typeof body === "object" && "error" in body) throw new Error(String((body as { error: string }).error));
+    if (res.status >= 500) throw new Error(API_DOWN);
+    throw new Error(`${res.status} ${res.statusText}`);
+  }
+  return body as T;
+}
 export async function getJSON<T>(path: string): Promise<T> {
   const res = await fetch(path, { cache: "no-store" });
-  const body = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error((body as { error?: string }).error || `${res.status} ${res.statusText}`);
-  return body as T;
+  return handle<T>(res);
 }
 
 export async function postJSON<T>(path: string, data: unknown): Promise<T> {
@@ -90,9 +102,7 @@ export async function postJSON<T>(path: string, data: unknown): Promise<T> {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
-  const body = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error((body as { error?: string }).error || `${res.status} ${res.statusText}`);
-  return body as T;
+  return handle<T>(res);
 }
 
 export function useApi<T>(path: string | null) {

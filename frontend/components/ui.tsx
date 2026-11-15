@@ -98,7 +98,7 @@ export function ErrorState({ message }: { message: string }) {
       <p className="font-semibold">Could not reach the Flask API</p>
       <p className="mt-1 text-ink2">{message}</p>
       <p className="mt-3 font-mono text-xs text-muted">
-        Start it from the project root: python -m backend.app
+        {"Start it from the project root:  .venv\\Scripts\\python -m backend.app"}
       </p>
     </div>
   );
