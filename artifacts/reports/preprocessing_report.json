@@ -1,0 +1,902 @@
+{
+  "generated_at": "2026-11-16 01:17:12",
+  "total_seconds": 43.7,
+  "config": {
+    "datasets": [
+      "DS01-005",
+      "DS02-006",
+      "DS03-012"
+    ],
+    "chunk_size": 500000,
+    "use_virtual_sensors": false,
+    "baseline_poly_degree": 3,
+    "baseline_ridge_alpha": 0.001,
+    "baseline_max_samples": 400000,
+    "min_altitude_ft": 0.0,
+    "clip_quantiles": [
+      0.005,
+      0.995
+    ],
+    "rul_cap": null,
+    "rolling_window": 5,
+    "slope_window": 10,
+    "ewm_alpha": 0.3,
+    "baseline_cycles": 5,
+    "variance_threshold": 1e-08,
+    "correlation_threshold": 0.95,
+    "max_features": 40,
+    "random_state": 42
+  },
+  "steps": [
+    {
+      "key": "inventory",
+      "title": "Data inventory",
+      "description": "Locate HDF5 files, verify they open, count 1 Hz rows per split.",
+      "details": {
+        "files": [
+          {
+            "name": "DS01-005",
+            "size_gb": 2.87,
+            "rows_dev": 4906636,
+            "rows_test": 2735232,
+            "ok": true
+          },
+          {
+            "name": "DS02-006",
+            "size_gb": 2.45,
+            "rows_dev": 5263447,
+            "rows_test": 1253743,
+            "ok": true
+          },
+          {
+            "name": "DS03-012",
+            "size_gb": 3.69,
+            "rows_dev": 5571277,
+            "rows_test": 4251560,
+            "ok": true
+          },
+          {
+            "name": "DS04",
+            "size_gb": 3.75,
+            "rows_dev": 6377452,
+            "rows_test": 3602561,
+            "ok": true
+          },
+          {
+            "name": "DS05",
+            "size_gb": 2.6,
+            "rows_dev": 4350606,
+            "rows_test": 2562046,
+            "ok": true
+          },
+          {
+            "name": "DS06",
+            "size_gb": 2.55,
+            "rows_dev": 4257209,
+            "rows_test": 2522447,
+            "ok": true
+          },
+          {
+            "name": "DS07",
+            "size_gb": 2.71,
+            "rows_dev": 4350176,
+            "rows_test": 2869786,
+            "ok": true
+          },
+          {
+            "name": "DS08a-009",
+            "size_gb": 3.24,
+            "rows_dev": 4885389,
+            "rows_test": 3722997,
+            "ok": true
+          },
+          {
+            "name": "DS08c-008",
+            "size_gb": 2.41,
+            "rows_dev": 4299918,
+            "rows_test": 2117819,
+            "ok": true
+          },
+          {
+            "name": "DS08d-010",
+            "size_gb": 2.89,
+            "ok": false,
+            "error": "truncated file: eof = 2885034848, sblock->base_addr = 0, stored_eof = 2885034880"
+          }
+        ],
+        "selected": [
+          "DS01-005",
+          "DS02-006",
+          "DS03-012"
+        ],
+        "rows": {
+          "DS01-005": {
+            "dev": 4906636,
+            "test": 2735232
+          },
+          "DS02-006": {
+            "dev": 5263447,
+            "test": 1253743
+          },
+          "DS03-012": {
+            "dev": 5571277,
+            "test": 4251560
+          }
+        },
+        "variables": {
+          "W (flight conditions)": [
+            "alt",
+            "Mach",
+            "TRA",
+            "T2"
+          ],
+          "X_s (sensors)": [
+            "T24",
+            "T30",
+            "T48",
+            "T50",
+            "P15",
+            "P2",
+            "P21",
+            "P24",
+            "Ps30",
+            "P40",
+            "P50",
+            "Nf",
+            "Nc",
+            "Wf"
+          ],
+          "T (health params, EDA only)": [
+            "fan_eff_mod",
+            "fan_flow_mod",
+            "LPC_eff_mod",
+            "LPC_flow_mod",
+            "HPC_eff_mod",
+            "HPC_flow_mod",
+            "HPT_eff_mod",
+            "HPT_flow_mod",
+            "LPT_eff_mod",
+            "LPT_flow_mod"
+          ],
+          "A (auxiliary)": [
+            "unit",
+            "cycle",
+            "Fc",
+            "hs"
+          ]
+        }
+      },
+      "seconds": 0.01
+    },
+    {
+      "key": "baseline_fit",
+      "title": "Fit healthy-engine baseline",
+      "description": "Stream development data, clean it, sample healthy (hs=1) seconds and fit sensor = f(alt, Mach, TRA, T2) so flight-condition effects can be removed.",
+      "details": {
+        "healthy_samples_used": 147335,
+        "model": "StandardScaler -> PolynomialFeatures(degree=3) -> Ridge(alpha=0.001)",
+        "inputs": [
+          "alt",
+          "Mach",
+          "TRA",
+          "T2"
+        ],
+        "outputs": [
+          "T24",
+          "T30",
+          "T48",
+          "T50",
+          "P15",
+          "P2",
+          "P21",
+          "P24",
+          "Ps30",
+          "P40",
+          "P50",
+          "Nf",
+          "Nc",
+          "Wf"
+        ],
+        "r2_healthy_holdout": {
+          "T24": 0.99997,
+          "T30": 0.9999,
+          "T48": 0.99974,
+          "T50": 0.99928,
+          "P15": 1.0,
+          "P2": 1.0,
+          "P21": 1.0,
+          "P24": 0.99999,
+          "Ps30": 0.99997,
+          "P40": 0.99997,
+          "P50": 0.99999,
+          "Nf": 0.99997,
+          "Nc": 0.99994,
+          "Wf": 0.99994
+        },
+        "residual_sigma": {
+          "T24": 0.1190079990762938,
+          "T30": 0.6565896176834336,
+          "T48": 1.9134785848278875,
+          "T50": 1.637385801979407,
+          "P15": 0.005555403792045678,
+          "P2": 0.0003312212396124829,
+          "P21": 0.0056400042186759815,
+          "P24": 0.010093655701430188,
+          "Ps30": 0.30567688262203074,
+          "P40": 0.3061333823470289,
+          "P50": 0.00631000911407065,
+          "Nf": 1.0444176212787684,
+          "Nc": 1.6583829850838638,
+          "Wf": 0.005620613677884441
+        }
+      },
+      "seconds": 6.31
+    },
+    {
+      "key": "clean_residual_aggregate",
+      "title": "Clean \u2192 residualise \u2192 aggregate per flight",
+      "description": "Second streaming pass over dev + test: drop NaN/Inf/non-physical rows, convert sensors to healthy-baseline residuals, then compress each flight (1 Hz) to one row of cycle statistics using exact chunk-mergeable sufficient statistics.",
+      "details": {
+        "quality": {
+          "DS01-005/dev": {
+            "rows_in": 4906636,
+            "rows_out": 4906636,
+            "rows_removed": 0,
+            "removed_pct": 0.0,
+            "nan_rows": 0,
+            "inf_rows": 0,
+            "non_physical_rows": 0,
+            "low_altitude_rows": 0,
+            "nan_per_column": {}
+          },
+          "DS01-005/test": {
+            "rows_in": 2735232,
+            "rows_out": 2735232,
+            "rows_removed": 0,
+            "removed_pct": 0.0,
+            "nan_rows": 0,
+            "inf_rows": 0,
+            "non_physical_rows": 0,
+            "low_altitude_rows": 0,
+            "nan_per_column": {}
+          },
+          "DS02-006/dev": {
+            "rows_in": 5263447,
+            "rows_out": 5263447,
+            "rows_removed": 0,
+            "removed_pct": 0.0,
+            "nan_rows": 0,
+            "inf_rows": 0,
+            "non_physical_rows": 0,
+            "low_altitude_rows": 0,
+            "nan_per_column": {}
+          },
+          "DS02-006/test": {
+            "rows_in": 1253743,
+            "rows_out": 1253743,
+            "rows_removed": 0,
+            "removed_pct": 0.0,
+            "nan_rows": 0,
+            "inf_rows": 0,
+            "non_physical_rows": 0,
+            "low_altitude_rows": 0,
+            "nan_per_column": {}
+          },
+          "DS03-012/dev": {
+            "rows_in": 5571277,
+            "rows_out": 5571277,
+            "rows_removed": 0,
+            "removed_pct": 0.0,
+            "nan_rows": 0,
+            "inf_rows": 0,
+            "non_physical_rows": 0,
+            "low_altitude_rows": 0,
+            "nan_per_column": {}
+          },
+          "DS03-012/test": {
+            "rows_in": 4251560,
+            "rows_out": 4251560,
+            "rows_removed": 0,
+            "removed_pct": 0.0,
+            "nan_rows": 0,
+            "inf_rows": 0,
+            "non_physical_rows": 0,
+            "low_altitude_rows": 0,
+            "nan_per_column": {}
+          }
+        },
+        "rows_1hz_in": 23981895,
+        "rows_cycle_out": 2643,
+        "compression_ratio": 9073.7,
+        "duplicate_cycle_keys": 0,
+        "preview": {
+          "columns": [
+            "dataset",
+            "split",
+            "unit",
+            "cycle",
+            "op_duration_s",
+            "op_alt_max",
+            "r_T48_mean",
+            "r_T48_std",
+            "RUL_file"
+          ],
+          "rows": [
+            [
+              "DS01",
+              "dev",
+              1,
+              1,
+              4498,
+              10498.0,
+              -0.5608,
+              0.6286,
+              99
+            ],
+            [
+              "DS01",
+              "dev",
+              1,
+              2,
+              4660,
+              12750.0,
+              -0.7006,
+              0.7206,
+              98
+            ],
+            [
+              "DS01",
+              "dev",
+              1,
+              3,
+              5355,
+              10085.0,
+              -0.3835,
+              0.9484,
+              97
+            ],
+            [
+              "DS01",
+              "dev",
+              1,
+              4,
+              4181,
+              10942.0,
+              -0.8145,
+              0.7543,
+              96
+            ],
+            [
+              "DS01",
+              "dev",
+              1,
+              5,
+              4495,
+              14743.0,
+              -0.5391,
+              0.6411,
+              95
+            ]
+          ]
+        }
+      },
+      "seconds": 36.73
+    },
+    {
+      "key": "labels",
+      "title": "Remaining-Useful-Life labels",
+      "description": "Verify RUL = last cycle \u2212 current cycle, apply optional piece-wise cap, derive health stages (healthy > 30, warning 11-30, critical \u2264 10 cycles).",
+      "details": {
+        "rul_cap": null,
+        "label_mismatch_rows": 0,
+        "rul_min": 0,
+        "rul_max": 99,
+        "rul_mean": 39.29,
+        "engines": 34,
+        "cycles_per_engine": {
+          "DS01_u01": 100,
+          "DS01_u02": 75,
+          "DS01_u03": 100,
+          "DS01_u04": 95,
+          "DS01_u05": 89,
+          "DS01_u06": 94,
+          "DS01_u07": 90,
+          "DS01_u08": 89,
+          "DS01_u09": 80,
+          "DS01_u10": 82,
+          "DS02_u02": 75,
+          "DS02_u05": 89,
+          "DS02_u10": 82,
+          "DS02_u11": 59,
+          "DS02_u14": 76,
+          "DS02_u15": 67,
+          "DS02_u16": 63,
+          "DS02_u18": 71,
+          "DS02_u20": 66,
+          "DS03_u01": 72,
+          "DS03_u02": 73,
+          "DS03_u03": 67,
+          "DS03_u04": 60,
+          "DS03_u05": 93,
+          "DS03_u06": 63,
+          "DS03_u07": 80,
+          "DS03_u08": 71,
+          "DS03_u09": 84,
+          "DS03_u10": 66,
+          "DS03_u11": 59,
+          "DS03_u12": 93,
+          "DS03_u13": 77,
+          "DS03_u14": 76,
+          "DS03_u15": 67
+        },
+        "health_stage_counts": {
+          "healthy": 1589,
+          "warning": 680,
+          "critical": 374
+        }
+      },
+      "seconds": 0.12
+    },
+    {
+      "key": "features",
+      "title": "Time-series feature engineering",
+      "description": "Causal per-engine rolling mean/std, EWMA, rolling slope and drift-from-own-baseline on every residual signal.",
+      "details": {
+        "n_features": 107,
+        "constant_dropped": [],
+        "groups": {
+          "operating_condition": [
+            "op_duration_s",
+            "op_alt_max",
+            "op_alt_mean",
+            "op_mach_mean",
+            "op_mach_max",
+            "op_tra_mean",
+            "op_tra_max",
+            "op_t2_mean"
+          ],
+          "residual_mean": [
+            "r_T24_mean",
+            "r_T30_mean",
+            "r_T48_mean",
+            "r_T50_mean",
+            "r_P15_mean",
+            "r_P2_mean",
+            "r_P21_mean",
+            "r_P24_mean",
+            "r_Ps30_mean",
+            "r_P40_mean",
+            "r_P50_mean",
+            "r_Nf_mean",
+            "r_Nc_mean",
+            "r_Wf_mean"
+          ],
+          "residual_std": [
+            "r_T24_std",
+            "r_T30_std",
+            "r_T48_std",
+            "r_T50_std",
+            "r_P15_std",
+            "r_P2_std",
+            "r_P21_std",
+            "r_P24_std",
+            "r_Ps30_std",
+            "r_P40_std",
+            "r_P50_std",
+            "r_Nf_std",
+            "r_Nc_std",
+            "r_Wf_std"
+          ],
+          "temporal": 70
+        }
+      },
+      "seconds": 0.36
+    },
+    {
+      "key": "split",
+      "title": "Train / test split by engine",
+      "description": "Use the official N-CMAPSS split: development engines \u2192 train, test engines \u2192 test. Splitting by engine (never by row) prevents leakage between cycles of the same engine.",
+      "details": {
+        "train_engines": [
+          "DS01_u01",
+          "DS01_u02",
+          "DS01_u03",
+          "DS01_u04",
+          "DS01_u05",
+          "DS01_u06",
+          "DS02_u02",
+          "DS02_u05",
+          "DS02_u10",
+          "DS02_u16",
+          "DS02_u18",
+          "DS02_u20",
+          "DS03_u01",
+          "DS03_u02",
+          "DS03_u03",
+          "DS03_u04",
+          "DS03_u05",
+          "DS03_u06",
+          "DS03_u07",
+          "DS03_u08",
+          "DS03_u09"
+        ],
+        "test_engines": [
+          "DS01_u07",
+          "DS01_u08",
+          "DS01_u09",
+          "DS01_u10",
+          "DS02_u11",
+          "DS02_u14",
+          "DS02_u15",
+          "DS03_u10",
+          "DS03_u11",
+          "DS03_u12",
+          "DS03_u13",
+          "DS03_u14",
+          "DS03_u15"
+        ],
+        "train_rows": 1662,
+        "test_rows": 981
+      },
+      "seconds": 0.0
+    },
+    {
+      "key": "winsorize",
+      "title": "Outlier treatment (winsorising)",
+      "description": "Clip every feature to the training 0.5%\u201399.5% percentiles; limits are learned on train engines only.",
+      "details": {
+        "values_clipped_train": 1717,
+        "values_clipped_test": 1530
+      },
+      "seconds": 0.06
+    },
+    {
+      "key": "selection",
+      "title": "Feature selection",
+      "description": "Variance filter \u2192 |Spearman| relevance to RUL \u2192 drop features with |r| > 0.95 to a stronger one \u2192 keep top 40.",
+      "details": {
+        "n_selected": 40,
+        "selected": [
+          {
+            "feature": "r_T50_mean__delta",
+            "abs_spearman": 0.9514
+          },
+          {
+            "feature": "age_cycles",
+            "abs_spearman": 0.8832
+          },
+          {
+            "feature": "r_Nc_mean__delta",
+            "abs_spearman": 0.8824
+          },
+          {
+            "feature": "r_Wf_mean__slope",
+            "abs_spearman": 0.813
+          },
+          {
+            "feature": "r_T48_mean__roll_std",
+            "abs_spearman": 0.7497
+          },
+          {
+            "feature": "r_Nc_mean__slope",
+            "abs_spearman": 0.7205
+          },
+          {
+            "feature": "r_T24_mean__slope",
+            "abs_spearman": 0.6908
+          },
+          {
+            "feature": "r_T30_mean__delta",
+            "abs_spearman": 0.6873
+          },
+          {
+            "feature": "r_P21_mean__ewm",
+            "abs_spearman": 0.6795
+          },
+          {
+            "feature": "r_Ps30_mean__ewm",
+            "abs_spearman": 0.6236
+          },
+          {
+            "feature": "r_Nc_mean__roll_std",
+            "abs_spearman": 0.574
+          },
+          {
+            "feature": "r_Wf_mean__roll_std",
+            "abs_spearman": 0.564
+          },
+          {
+            "feature": "r_P15_mean",
+            "abs_spearman": 0.5534
+          },
+          {
+            "feature": "r_P40_mean__slope",
+            "abs_spearman": 0.5206
+          },
+          {
+            "feature": "r_Wf_std",
+            "abs_spearman": 0.5015
+          },
+          {
+            "feature": "r_T30_mean__slope",
+            "abs_spearman": 0.4789
+          },
+          {
+            "feature": "r_T24_mean__roll_std",
+            "abs_spearman": 0.4737
+          },
+          {
+            "feature": "r_T24_std",
+            "abs_spearman": 0.4445
+          },
+          {
+            "feature": "r_P40_mean__roll_std",
+            "abs_spearman": 0.4196
+          },
+          {
+            "feature": "r_P50_mean__delta",
+            "abs_spearman": 0.3795
+          },
+          {
+            "feature": "r_P50_mean__roll_std",
+            "abs_spearman": 0.3671
+          },
+          {
+            "feature": "r_T48_std",
+            "abs_spearman": 0.364
+          },
+          {
+            "feature": "r_P24_std",
+            "abs_spearman": 0.3578
+          },
+          {
+            "feature": "r_P24_mean__roll_std",
+            "abs_spearman": 0.3336
+          },
+          {
+            "feature": "r_T50_std",
+            "abs_spearman": 0.3259
+          },
+          {
+            "feature": "r_P15_mean__slope",
+            "abs_spearman": 0.3256
+          },
+          {
+            "feature": "r_P50_mean__slope",
+            "abs_spearman": 0.3204
+          },
+          {
+            "feature": "r_P40_std",
+            "abs_spearman": 0.2967
+          },
+          {
+            "feature": "r_T30_mean__roll_std",
+            "abs_spearman": 0.258
+          },
+          {
+            "feature": "r_T30_std",
+            "abs_spearman": 0.2336
+          },
+          {
+            "feature": "r_P50_std",
+            "abs_spearman": 0.1634
+          },
+          {
+            "feature": "r_Nc_std",
+            "abs_spearman": 0.1424
+          },
+          {
+            "feature": "op_mach_mean",
+            "abs_spearman": 0.0805
+          },
+          {
+            "feature": "op_duration_s",
+            "abs_spearman": 0.0787
+          },
+          {
+            "feature": "op_t2_mean",
+            "abs_spearman": 0.0762
+          },
+          {
+            "feature": "op_alt_max",
+            "abs_spearman": 0.0756
+          },
+          {
+            "feature": "op_tra_max",
+            "abs_spearman": 0.0744
+          },
+          {
+            "feature": "r_P2_mean__ewm",
+            "abs_spearman": 0.0647
+          },
+          {
+            "feature": "r_P2_mean__roll_std",
+            "abs_spearman": 0.063
+          },
+          {
+            "feature": "r_P2_std",
+            "abs_spearman": 0.0627
+          }
+        ],
+        "dropped_counts": {
+          "low_variance": 0,
+          "redundant": 54,
+          "over_cap": 13
+        },
+        "dropped": {
+          "low_variance": [],
+          "redundant": [
+            "r_T48_mean__delta",
+            "r_T50_mean__ewm",
+            "r_T50_mean__roll_mean",
+            "r_T50_mean",
+            "r_T48_mean__ewm",
+            "r_T48_mean__roll_mean",
+            "r_T48_mean",
+            "r_Wf_mean__ewm",
+            "r_Wf_mean__roll_mean",
+            "r_Wf_mean__delta",
+            "r_Wf_mean",
+            "r_Nc_mean__ewm",
+            "r_T50_mean__slope",
+            "r_Nc_mean__roll_mean",
+            "r_T48_mean__slope",
+            "r_T24_mean__ewm",
+            "r_T24_mean__roll_mean",
+            "r_Nc_mean",
+            "r_P24_mean__ewm",
+            "r_T24_mean__delta",
+            "r_P24_mean__roll_mean",
+            "r_T24_mean",
+            "r_P24_mean__delta",
+            "r_P24_mean",
+            "r_T50_mean__roll_std",
+            "r_T30_mean__ewm",
+            "r_P40_mean__delta",
+            "r_T30_mean__roll_mean",
+            "r_P15_mean__ewm",
+            "r_P21_mean__roll_mean",
+            "r_P15_mean__roll_mean",
+            "r_P40_mean__ewm",
+            "r_P40_mean__roll_mean",
+            "r_T30_mean",
+            "r_P40_mean",
+            "r_Ps30_mean__delta",
+            "r_P24_mean__slope",
+            "r_Ps30_mean__roll_mean",
+            "r_Ps30_mean",
+            "r_P21_mean",
+            "r_P15_mean__delta",
+            "r_P21_mean__delta",
+            "r_Ps30_mean__slope",
+            "r_Ps30_mean__roll_std",
+            "r_P50_mean__ewm",
+            "r_P50_mean__roll_mean",
+            "r_P50_mean",
+            "r_P21_mean__slope",
+            "r_Ps30_std",
+            "op_tra_mean",
+            "op_alt_mean",
+            "op_mach_max",
+            "r_P15_std",
+            "r_P21_mean__roll_std"
+          ],
+          "over_cap": [
+            "r_P2_mean__roll_mean",
+            "r_Nf_mean__roll_std",
+            "r_P21_std",
+            "r_Nf_mean__slope",
+            "r_P2_mean",
+            "r_P2_mean__delta",
+            "r_Nf_mean__delta",
+            "r_P15_mean__roll_std",
+            "r_Nf_mean__ewm",
+            "r_Nf_mean__roll_mean",
+            "r_Nf_mean",
+            "r_P2_mean__slope",
+            "r_Nf_std"
+          ]
+        }
+      },
+      "seconds": 0.1
+    },
+    {
+      "key": "scaling",
+      "title": "Normalisation (z-score)",
+      "description": "StandardScaler fitted on train engines; mean 0 / std 1 per feature for distance- and gradient-based models (SVR, KNN, MLP, Ridge).",
+      "details": {
+        "mean_before": {
+          "r_T50_mean__delta": 3.3916,
+          "age_cycles": 41.0295,
+          "r_Nc_mean__delta": -2.5931,
+          "r_Wf_mean__slope": 0.0803,
+          "r_T48_mean__roll_std": 0.4225,
+          "r_Nc_mean__slope": -0.1298,
+          "r_T24_mean__slope": 0.0676,
+          "r_T30_mean__delta": -0.7868
+        },
+        "std_before": {
+          "r_T50_mean__delta": 4.2053,
+          "age_cycles": 24.464,
+          "r_Nc_mean__delta": 3.4581,
+          "r_Wf_mean__slope": 0.1074,
+          "r_T48_mean__roll_std": 0.3563,
+          "r_Nc_mean__slope": 0.177,
+          "r_T24_mean__slope": 0.1008,
+          "r_T30_mean__delta": 1.2522
+        },
+        "preview": {
+          "columns": [
+            "engine_id",
+            "cycle",
+            "RUL",
+            "r_T50_mean__delta",
+            "age_cycles",
+            "r_Nc_mean__delta",
+            "r_Wf_mean__slope",
+            "r_T48_mean__roll_std",
+            "r_Nc_mean__slope"
+          ],
+          "rows": [
+            [
+              "DS01_u01",
+              1,
+              99,
+              -0.8068,
+              -1.6368,
+              0.7501,
+              -0.7478,
+              -1.1861,
+              0.7334
+            ],
+            [
+              "DS01_u01",
+              2,
+              98,
+              -0.8202,
+              -1.5959,
+              0.7292,
+              -1.8223,
+              -0.9085,
+              -0.0819
+            ],
+            [
+              "DS01_u01",
+              3,
+              97,
+              -0.7655,
+              -1.555,
+              0.6831,
+              -1.1423,
+              -0.7399,
+              -0.452
+            ],
+            [
+              "DS01_u01",
+              4,
+              96,
+              -0.8536,
+              -1.5141,
+              0.8171,
+              -0.9645,
+              -0.6643,
+              0.7828
+            ],
+            [
+              "DS01_u01",
+              5,
+              95,
+              -0.7894,
+              -1.4732,
+              0.6591,
+              -0.9588,
+              -0.7243,
+              0.3136
+            ]
+          ]
+        }
+      },
+      "seconds": 0.01
+    }
+  ]
+}

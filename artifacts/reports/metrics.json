@@ -1,0 +1,235 @@
+{
+  "best_model": "Extra Trees",
+  "cv_folds": 5,
+  "selection_metric": "CV RMSE",
+  "n_train_rows": 1662,
+  "n_test_rows": 981,
+  "results": [
+    {
+      "model": "Linear Regression",
+      "cv": {
+        "MAE": 7.797,
+        "RMSE": 9.912,
+        "R2": 0.8361,
+        "NASA_score": 2411.46
+      },
+      "test": {
+        "MAE": 8.116,
+        "RMSE": 10.068,
+        "R2": 0.8099,
+        "NASA_score": 1656.57
+      },
+      "train_seconds": 0.03
+    },
+    {
+      "model": "Ridge Regression",
+      "cv": {
+        "MAE": 7.769,
+        "RMSE": 9.877,
+        "R2": 0.8373,
+        "NASA_score": 2391.05
+      },
+      "test": {
+        "MAE": 8.066,
+        "RMSE": 10.011,
+        "R2": 0.8121,
+        "NASA_score": 1637.67
+      },
+      "train_seconds": 0.01
+    },
+    {
+      "model": "K-Nearest Neighbours",
+      "cv": {
+        "MAE": 8.533,
+        "RMSE": 11.754,
+        "R2": 0.7695,
+        "NASA_score": 3304.1
+      },
+      "test": {
+        "MAE": 7.442,
+        "RMSE": 10.334,
+        "R2": 0.7997,
+        "NASA_score": 1703.86
+      },
+      "train_seconds": 0.15
+    },
+    {
+      "model": "Support Vector Regression",
+      "cv": {
+        "MAE": 6.663,
+        "RMSE": 9.355,
+        "R2": 0.854,
+        "NASA_score": 2190.39
+      },
+      "test": {
+        "MAE": 6.981,
+        "RMSE": 9.184,
+        "R2": 0.8418,
+        "NASA_score": 1354.7
+      },
+      "train_seconds": 0.64
+    },
+    {
+      "model": "Random Forest",
+      "cv": {
+        "MAE": 4.943,
+        "RMSE": 7.466,
+        "R2": 0.907,
+        "NASA_score": 1397.49
+      },
+      "test": {
+        "MAE": 5.62,
+        "RMSE": 7.897,
+        "R2": 0.8831,
+        "NASA_score": 1037.83
+      },
+      "train_seconds": 9.75
+    },
+    {
+      "model": "Extra Trees",
+      "cv": {
+        "MAE": 4.77,
+        "RMSE": 7.196,
+        "R2": 0.9136,
+        "NASA_score": 1316.28
+      },
+      "test": {
+        "MAE": 5.412,
+        "RMSE": 7.557,
+        "R2": 0.8929,
+        "NASA_score": 952.03
+      },
+      "train_seconds": 2.81
+    },
+    {
+      "model": "Gradient Boosting",
+      "cv": {
+        "MAE": 5.16,
+        "RMSE": 7.569,
+        "R2": 0.9044,
+        "NASA_score": 1512.33
+      },
+      "test": {
+        "MAE": 5.745,
+        "RMSE": 8.227,
+        "R2": 0.8731,
+        "NASA_score": 1148.44
+      },
+      "train_seconds": 3.27
+    },
+    {
+      "model": "MLP Neural Network",
+      "cv": {
+        "MAE": 7.03,
+        "RMSE": 9.272,
+        "R2": 0.8566,
+        "NASA_score": 2131.56
+      },
+      "test": {
+        "MAE": 7.095,
+        "RMSE": 9.548,
+        "R2": 0.8291,
+        "NASA_score": 1611.86
+      },
+      "train_seconds": 3.67
+    },
+    {
+      "model": "LightGBM",
+      "cv": {
+        "MAE": 5.118,
+        "RMSE": 7.439,
+        "R2": 0.9077,
+        "NASA_score": 1472.61
+      },
+      "test": {
+        "MAE": 5.691,
+        "RMSE": 8.143,
+        "R2": 0.8757,
+        "NASA_score": 1116.1
+      },
+      "train_seconds": 1.38
+    }
+  ],
+  "feature_importance": [
+    {
+      "feature": "r_T50_mean__delta",
+      "importance": 0.2916
+    },
+    {
+      "feature": "age_cycles",
+      "importance": 0.2885
+    },
+    {
+      "feature": "r_Nc_mean__delta",
+      "importance": 0.1652
+    },
+    {
+      "feature": "r_Wf_mean__slope",
+      "importance": 0.0507
+    },
+    {
+      "feature": "r_T48_mean__roll_std",
+      "importance": 0.0385
+    },
+    {
+      "feature": "r_Ps30_mean__ewm",
+      "importance": 0.0276
+    },
+    {
+      "feature": "r_T30_mean__delta",
+      "importance": 0.0194
+    },
+    {
+      "feature": "r_Nc_mean__slope",
+      "importance": 0.0171
+    },
+    {
+      "feature": "r_P21_mean__ewm",
+      "importance": 0.0142
+    },
+    {
+      "feature": "r_T24_mean__slope",
+      "importance": 0.0089
+    },
+    {
+      "feature": "r_P50_mean__delta",
+      "importance": 0.0081
+    },
+    {
+      "feature": "op_duration_s",
+      "importance": 0.0067
+    },
+    {
+      "feature": "op_alt_max",
+      "importance": 0.0059
+    },
+    {
+      "feature": "op_t2_mean",
+      "importance": 0.0053
+    },
+    {
+      "feature": "r_Nc_mean__roll_std",
+      "importance": 0.0042
+    },
+    {
+      "feature": "r_P2_mean__ewm",
+      "importance": 0.0042
+    },
+    {
+      "feature": "r_P50_mean__slope",
+      "importance": 0.0036
+    },
+    {
+      "feature": "r_T30_mean__roll_std",
+      "importance": 0.003
+    },
+    {
+      "feature": "r_P40_mean__roll_std",
+      "importance": 0.0029
+    },
+    {
+      "feature": "r_P50_mean__roll_std",
+      "importance": 0.0028
+    }
+  ]
+}

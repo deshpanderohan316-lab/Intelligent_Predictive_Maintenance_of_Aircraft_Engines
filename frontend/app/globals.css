@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  background: #0d0d0d;
+  color: #f0efec;
+}
+
+/* Subtle blueprint grid behind every page */
+.bg-blueprint {
+  background-image:
+    linear-gradient(rgba(57, 135, 229, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(57, 135, 229, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+input[type="range"] {
+  accent-color: #3987e5;
+}
+
+.recharts-legend-item-text {
+  color: #c3c2b7 !important;
+}
