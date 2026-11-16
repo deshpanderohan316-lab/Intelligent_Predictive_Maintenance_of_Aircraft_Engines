@@ -6,6 +6,9 @@ classical machine learning. The project includes a **Flask** API and an animated
 See **[docs/PROJECT_PLAN.md](docs/PROJECT_PLAN.md)** for the full plan, a detailed explanation of the
 preprocessing, and the results.
 
+**New to the project?** Read **[project_explained/00_START_HERE.md](project_explained/00_START_HERE.md)**.
+It covers the domain, the full mathematics, a line-by-line code walkthrough and viva questions.
+
 ## Folder structure
 
 ```
@@ -71,6 +74,10 @@ npm run dev
 ```
 
 The UI proxies `/api/*` to Flask (see `frontend/next.config.mjs`; you can override the address with `FLASK_URL`).
+
+**5. Deploy to Vercel**: see **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)**. In short:
+`python -m backend.export_static` → push to GitHub → import the repo in Vercel with
+**Root Directory = `frontend`**.
 
 ## Notes
 

@@ -91,12 +91,44 @@ async function handle<T>(res: Response): Promise<T> {
   }
   return body as T;
 }
+// ---------------------------------------------------------------- static mode (Vercel)
+// With NEXT_PUBLIC_STATIC_DATA=1 the site reads pre-exported JSON from /public/data
+// (made by `python -m backend.export_static`) instead of calling the Flask API.
+export const STATIC_MODE = process.env.NEXT_PUBLIC_STATIC_DATA === "1";
+
+/** "/api/engines/DS02_u11" -> "/data/engines/DS02_u11.json" */
+const staticPath = (apiPath: string) => `/data${apiPath.replace(/^\/api/, "")}.json`;
+
+async function staticGet<T>(apiPath: string): Promise<T> {
+  const res = await fetch(staticPath(apiPath));
+  if (!res.ok) throw new Error(`Static data not found for ${apiPath} - re-run: python -m backend.export_static`);
+  return (await res.json()) as T;
+}
+
+const predictCache = new Map<string, Record<string, unknown>>();
+
+async function staticPredict<T>(data: unknown): Promise<T> {
+  const { engine_id, cycle } = data as { engine_id: string; cycle?: number };
+  let table = predictCache.get(engine_id);
+  if (!table) {
+    table = await staticGet<Record<string, unknown>>(`/api/predict/${engine_id}`);
+    predictCache.set(engine_id, table);
+  }
+  const keys = Object.keys(table).map(Number);
+  const key = cycle ?? Math.max(...keys);
+  const hit = table[String(key)];
+  if (!hit) throw new Error(`Engine '${engine_id}' has no cycle ${key}`);
+  return hit as T;
+}
+
 export async function getJSON<T>(path: string): Promise<T> {
+  if (STATIC_MODE) return staticGet<T>(path);
   const res = await fetch(path, { cache: "no-store" });
   return handle<T>(res);
 }
 
 export async function postJSON<T>(path: string, data: unknown): Promise<T> {
+  if (STATIC_MODE && path === "/api/predict") return staticPredict<T>(data);
   const res = await fetch(path, {
     method: "POST",
     headers: { "Content-Type": "application/json" },

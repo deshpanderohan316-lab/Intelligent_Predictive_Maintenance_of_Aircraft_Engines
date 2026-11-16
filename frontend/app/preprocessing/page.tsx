@@ -7,7 +7,7 @@ import {
 } from "recharts";
 import { Card, Counter, ErrorState, Loader, PageHeader, Pill, Select } from "@/components/ui";
 import {
-  EngineDetail, EngineInfo, PipelineStep, PreprocessingReport, fmt, prettyFeature, toRows, useApi,
+  EngineDetail, EngineInfo, PipelineStep, PreprocessingReport, fmt, getJSON, prettyFeature, toRows, useApi,
 } from "@/lib/api";
 import { INK, SERIES, STATUS, axisProps, gridProps, tooltipProps } from "@/lib/theme";
 
@@ -441,7 +441,7 @@ function BeforeAfter() {
 
   useEffect(() => {
     selected.filter((id) => !details[id]).forEach((id) =>
-      fetch(`/api/engines/${id}`).then((r) => r.json()).then((d: EngineDetail) => setDetails((p) => ({ ...p, [id]: d }))));
+      getJSON<EngineDetail>(`/api/engines/${id}`).then((d) => setDetails((p) => ({ ...p, [id]: d }))).catch(() => undefined));
   }, [selected, details]);
 
   const merged = useMemo(() => {

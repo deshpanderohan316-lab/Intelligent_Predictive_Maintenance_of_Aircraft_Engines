@@ -1,0 +1,1 @@
+{"best_model":"Extra Trees","best_test":{"MAE":5.412,"NASA_score":952.03,"R2":0.8929,"RMSE":7.557},"datasets":["DS01-005","DS02-006","DS03-012"],"engines":34,"features_engineered":107,"features_selected":40,"pipeline_seconds":43.7,"rows_1hz":23981895,"rows_cycle":2643}
