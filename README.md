@@ -75,7 +75,10 @@ npm run dev
 
 The UI proxies `/api/*` to Flask (see `frontend/next.config.mjs`; you can override the address with `FLASK_URL`).
 
-**5. Deploy to Vercel**: see **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)**. In short:
+**5. Deploy to Render (Docker, live Flask API)**: see **[docs/DEPLOYMENT_RENDER.md](docs/DEPLOYMENT_RENDER.md)**.
+Push to GitHub, then in Render choose **New → Blueprint** and select the repo (it uses `render.yaml` + `Dockerfile`).
+
+**Alternative: Vercel (static snapshot)**: see **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)**. In short:
 `python -m backend.export_static` → push to GitHub → import the repo in Vercel with
 **Root Directory = `frontend`**.
 

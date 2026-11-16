@@ -1,0 +1,27 @@
+# Keep the build context small: the raw dataset alone is ~28 GB
+data_set/
+data/interim/
+.venv/
+**/__pycache__/
+**/*.pyc
+.pytest_cache/
+.git/
+.gitignore
+.vscode/
+project_explained/
+docs/
+ml/
+artifacts/preprocessing/
+
+# frontend build outputs / deps (rebuilt inside the image)
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/.env.local
+frontend/public/data/
+
+*.md
+start.bat
+Dockerfile
+.dockerignore
+render.yaml

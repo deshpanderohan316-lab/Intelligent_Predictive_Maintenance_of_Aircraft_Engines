@@ -14,11 +14,16 @@ data/processed/*
 artifacts/**/*.joblib
 artifacts/**/*.parquet
 !**/.gitkeep
+# ...but keep what the deployed API serves (needed by the Docker image on Render)
+!data/processed/train.parquet
+!data/processed/test.parquet
+!artifacts/models/best_model.joblib
 
 # frontend
 frontend/node_modules/
 frontend/.next/
 frontend/.env.local
+frontend/out/
 
 # personal study notes (not published)
 project_explained/
